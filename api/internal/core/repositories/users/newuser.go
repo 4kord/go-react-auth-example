@@ -1,4 +1,4 @@
-package usersrepo
+package users
 
 import (
 	"github.com/4kord/go-react-auth/internal/errs"

@@ -1,4 +1,4 @@
-package usersrepo
+package users
 
 import (
 	"database/sql"
@@ -9,12 +9,12 @@ import (
 	"github.com/4kord/go-react-auth/internal/logger"
 )
 
-func (r repository) GetUserByUsername(username string) (*domain.User, *errs.Error) {
+func (r repository) GetUserById(id int) (*domain.User, *errs.Error) {
     var user domain.User
 
-	q := "SELECT * FROM users WHERE username = $1"
+	q := "SELECT * FROM users WHERE id = $1"
 
-    row := r.DB.QueryRow(q, username)
+    row := r.DB.QueryRow(q, id)
 
     err := row.Scan(&user.Id, &user.Username, &user.Password, &user.Role)
     if err != nil {
