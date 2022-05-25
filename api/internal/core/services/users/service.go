@@ -1,7 +1,7 @@
 package users
 
 import (
-	"github.com/4kord/go-react-auth/internal/core/repositories/users"
+	"github.com/4kord/go-react-auth/internal/core/repositories/usersrepo"
 	"github.com/4kord/go-react-auth/internal/dto"
 	"github.com/4kord/go-react-auth/internal/errs"
 )
@@ -12,9 +12,9 @@ type Service interface {
 }
 
 type service struct {
-	Repo users.Repository
+	Repo usersrepo.Repository
 }
 
-func New(repo users.Repository) service {
+func New(repo usersrepo.Repository) service {
 	return service{Repo: repo}
 }

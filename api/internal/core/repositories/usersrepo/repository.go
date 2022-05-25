@@ -1,4 +1,4 @@
-package users
+package usersrepo
 
 import (
 	"github.com/4kord/go-react-auth/internal/core/domain"

@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 
-	controller "github.com/4kord/go-react-auth/internal/controllers"
-	usersrepo "github.com/4kord/go-react-auth/internal/core/repositories/users"
-	usersservice "github.com/4kord/go-react-auth/internal/core/services/users"
+	"github.com/4kord/go-react-auth/internal/controllers"
+	"github.com/4kord/go-react-auth/internal/core/repositories/usersrepo"
+	"github.com/4kord/go-react-auth/internal/core/services/users"
 	"github.com/4kord/go-react-auth/internal/logger"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
@@ -30,8 +30,8 @@ func main() {
 		logger.ErrorLog.Fatal(err)
 	}
 
-	userController := controller.UserController{
-		Service: usersservice.New(usersrepo.New(dbConn)),
+	userController := controllers.UserController{
+		Service: users.New(usersrepo.New(dbConn)),
 	}
 
 	router := mux.NewRouter()
