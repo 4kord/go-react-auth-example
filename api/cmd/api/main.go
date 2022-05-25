@@ -1,11 +1,10 @@
 package main
 
 import (
-	"net/http"
 	"os"
 
+	"github.com/4kord/go-react-auth/internal/http/app"
 	"github.com/4kord/go-react-auth/internal/http/db"
-	"github.com/4kord/go-react-auth/internal/http/routes"
 	"github.com/4kord/go-react-auth/internal/logger"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -22,5 +21,8 @@ func main() {
 		logger.ErrorLog.Fatal(err)
     }
 
-    logger.ErrorLog.Fatalln(http.ListenAndServe(os.Getenv("PORT"), routes.Routes(db)))
+    app.Run(app.Config{
+        Port: os.Getenv("PORT"),
+        Db: db,
+    })
 }

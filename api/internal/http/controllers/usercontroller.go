@@ -1,34 +1,35 @@
 package controllers
 
 import (
-	"encoding/json"
 	"net/http"
 
+	"github.com/4kord/go-react-auth/internal/core/services/users"
 	"github.com/4kord/go-react-auth/internal/dto"
 	"github.com/4kord/go-react-auth/internal/logger"
-	"github.com/4kord/go-react-auth/internal/core/services/users"
+	"github.com/gofiber/fiber/v2"
 )
 
 type UserController struct{
     Service users.Service
 }
 
-func (c UserController) Register(w http.ResponseWriter, r *http.Request) {
+func (ctrl UserController) Register(c *fiber.Ctx) error {
     var request dto.UserRequest
 
-    err := json.NewDecoder(r.Body).Decode(&request)
+    err := c.BodyParser(&request)
     if err != nil {
         logger.ErrorLog.Println(err.Error())
-		writeResponse(w, http.StatusBadRequest, err.Error())
-        return
+        return fiber.NewError(http.StatusInternalServerError, err.Error())
     }
 
-    e := c.Service.Register(request)
+    e := ctrl.Service.Register(request)
     if e != nil {
         logger.ErrorLog.Println(e.Message)
-		writeResponse(w, e.Code, e)
-        return
+        return fiber.NewError(e.Code, e.Message)
     }
 
-    writeResponse(w, http.StatusCreated, nil)
+    c.Status(http.StatusCreated)
+    return c.JSON(fiber.Map{
+        "message": "Account created",
+    })
 }
