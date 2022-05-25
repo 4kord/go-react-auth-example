@@ -6,11 +6,11 @@ import (
 
 	"github.com/4kord/go-react-auth/internal/dto"
 	"github.com/4kord/go-react-auth/internal/logger"
-	"github.com/4kord/go-react-auth/internal/service"
+	"github.com/4kord/go-react-auth/internal/core/services/users"
 )
 
 type UserController struct{
-    Service service.UserService
+    Service users.Service
 }
 
 func (c UserController) Register(w http.ResponseWriter, r *http.Request) {

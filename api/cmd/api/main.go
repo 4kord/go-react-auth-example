@@ -5,13 +5,13 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/4kord/go-react-auth/internal/controller"
-	"github.com/4kord/go-react-auth/internal/domain"
+	controller "github.com/4kord/go-react-auth/internal/controllers"
+	usersrepo "github.com/4kord/go-react-auth/internal/core/repositories/users"
+	usersservice "github.com/4kord/go-react-auth/internal/core/services/users"
 	"github.com/4kord/go-react-auth/internal/logger"
-	"github.com/4kord/go-react-auth/internal/service"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
-    _ "github.com/lib/pq"
+	_ "github.com/lib/pq"
 )
 
 func main() {
@@ -31,7 +31,7 @@ func main() {
 	}
 
 	userController := controller.UserController{
-		Service: service.NewDefaultUserService(domain.NewUserRepositoryAdapter(dbConn)),
+		Service: usersservice.New(usersrepo.New(dbConn)),
 	}
 
 	router := mux.NewRouter()
