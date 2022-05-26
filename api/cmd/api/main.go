@@ -22,6 +22,7 @@ func main() {
     if err != nil {
 		logger.ErrorLog.Fatal(err)
     }
+    defer db.Close()
 
     app := fiber.New(fiber.Config{
         ErrorHandler: func(c *fiber.Ctx, err error) error {
