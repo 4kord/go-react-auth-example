@@ -10,6 +10,7 @@ import (
 type Repository interface {
     GetUserById(int) (*domain.User, *errs.Error)
     GetUserByUsername(string) (*domain.User, *errs.Error)
+    Authenticate(string, string) (*domain.User, *errs.Error)
     NewUser(string, string) *errs.Error
 }
 

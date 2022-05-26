@@ -27,3 +27,10 @@ func UnAuthorizedError(msg string) *Error {
 		Message: msg,
 	}
 }
+
+func ConflictError(msg string) *Error {
+	return &Error{
+		Code:    http.StatusConflict,
+		Message: msg,
+	}
+}

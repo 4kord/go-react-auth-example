@@ -33,3 +33,22 @@ func (ctrl UserController) Register(c *fiber.Ctx) error {
         "message": "Account created",
     })
 }
+
+func (ctrl UserController) Login(c *fiber.Ctx) error {
+    var request dto.UserRequest
+
+    err := c.BodyParser(&request)
+    if err != nil {
+        logger.ErrorLog.Println(err.Error())
+        return fiber.NewError(http.StatusInternalServerError, err.Error())
+    }
+
+    response, e := ctrl.Service.Login(request)
+    if e != nil {
+        logger.ErrorLog.Println(e.Message)
+        return fiber.NewError(e.Code, e.Message)
+    }
+
+    c.Status(http.StatusOK)
+    return c.JSON(response)
+}

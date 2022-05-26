@@ -11,7 +11,7 @@ func (s service) Register(u dto.UserRequest) *errs.Error {
 		return err
 	}
 
-	err = s.Repo.NewUser(u.Username, u.Password)
+	err = s.repo.NewUser(u.Username, u.Password)
 	if err != nil {
 		return err
 	}

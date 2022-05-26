@@ -12,9 +12,9 @@ type Service interface {
 }
 
 type service struct {
-	Repo users.Repository
+	repo users.Repository
 }
 
 func New(repo users.Repository) service {
-	return service{Repo: repo}
+	return service{repo: repo}
 }

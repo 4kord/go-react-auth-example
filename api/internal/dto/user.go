@@ -16,6 +16,7 @@ type UserResponse struct {
     Username string `json:"username"`
     Password string `json:"password"`
     Role string `json:"role"`
+    AccessToken string `json:"accessToken"`
 }
 
 func (r UserRequest) Validate() *errs.Error {
