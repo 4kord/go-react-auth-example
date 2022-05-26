@@ -1,9 +1,9 @@
 package main
 
 import (
+	"database/sql"
 	"os"
 
-	"github.com/4kord/go-react-auth/internal/http/db"
 	"github.com/4kord/go-react-auth/internal/http/routes"
 	"github.com/4kord/go-react-auth/internal/logger"
 	"github.com/gofiber/fiber/v2"
@@ -18,11 +18,15 @@ func main() {
 		logger.ErrorLog.Fatal(err)
 	}
 
-    db, err := db.Setup(os.Getenv("DB_DRIVER"), os.Getenv("DB_DSN"))
-    if err != nil {
+	dbConn, err := sql.Open(os.Getenv("DB_DRIVER"), os.Getenv("DB_DSN"))
+	if err != nil {
 		logger.ErrorLog.Fatal(err)
-    }
-    defer db.Close()
+	}
+
+	err = dbConn.Ping()
+	if err != nil {
+		logger.ErrorLog.Fatal(err)
+	}
 
     app := fiber.New(fiber.Config{
         ErrorHandler: func(c *fiber.Ctx, err error) error {
@@ -45,5 +49,5 @@ func main() {
         },
     })
 
-    logger.ErrorLog.Fatal(routes.Setup(app, db).Listen(os.Getenv("PORT")))
+    logger.ErrorLog.Fatal(routes.Setup(app, dbConn).Listen(os.Getenv("PORT")))
 }

@@ -31,7 +31,7 @@ func (r repository) Authenticate(username, password string) (*domain.User, *errs
     if err != nil {
         logger.ErrorLog.Println(err.Error())
         if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
-            return nil, errs.UnAuthorizedError("Invalid username")
+            return nil, errs.UnAuthorizedError("Invalid password")
         } else {
             return nil, errs.ServerError("Unexpected bcrypt error")
         }
