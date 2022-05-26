@@ -8,7 +8,7 @@ import (
 )
 
 func (r repository) NewUser(username, password string) *errs.Error {
-    hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+    hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 5)
     if err != nil {
         logger.ErrorLog.Println(err.Error())
         return errs.ServerError("Unexpected bcrypt error")

@@ -18,15 +18,15 @@ func main() {
 		logger.ErrorLog.Fatal(err)
 	}
 
-	dbConn, err := sql.Open(os.Getenv("DB_DRIVER"), os.Getenv("DB_DSN"))
-	if err != nil {
+    conn, err := sql.Open(os.Getenv("DB_DRIVER"), os.Getenv("DB_DSN"))
+    if err != nil {
 		logger.ErrorLog.Fatal(err)
-	}
+    }
 
-	err = dbConn.Ping()
-	if err != nil {
+    err = conn.Ping()
+    if err != nil {
 		logger.ErrorLog.Fatal(err)
-	}
+    }
 
     app := fiber.New(fiber.Config{
         ErrorHandler: func(c *fiber.Ctx, err error) error {
@@ -49,5 +49,5 @@ func main() {
         },
     })
 
-    logger.ErrorLog.Fatal(routes.Setup(app, dbConn).Listen(os.Getenv("PORT")))
+    logger.ErrorLog.Fatal(routes.Setup(app, conn).Listen(os.Getenv("PORT")))
 }

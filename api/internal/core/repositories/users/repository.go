@@ -1,9 +1,9 @@
 package users
 
 import (
-	"github.com/4kord/go-react-auth/internal/core/domain"
 	"database/sql"
 
+	"github.com/4kord/go-react-auth/internal/core/domain"
 	"github.com/4kord/go-react-auth/internal/errs"
 )
 
