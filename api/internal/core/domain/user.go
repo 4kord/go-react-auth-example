@@ -18,7 +18,7 @@ type User struct {
 	jwt.StandardClaims
 }
 
-func (d User) GenerateToken() (string, *errs.Error) {
+func (d *User) GenerateToken() (string, *errs.Error) {
 	atExp, err := strconv.Atoi(os.Getenv("AT_EXP"))
 	if err != nil {
 		logger.ErrorLog.Println(err.Error())
@@ -43,6 +43,6 @@ func (d User) GenerateToken() (string, *errs.Error) {
 	return aTString, nil
 }
 
-func (d User) ValidateRole(role string) bool {
+func (d *User) ValidateRole(role string) bool {
 	return role == d.Role
 }

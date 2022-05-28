@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"os"
+	"strconv"
 	"time"
 
 	"github.com/4kord/go-react-auth/internal/core/domain"
@@ -27,11 +29,18 @@ func (s service) Login(r dto.UserRequest) (*dto.UserResponse, *errs.Error) {
 
 	rT := uuid.New().String()
 
+    rtExp, e := strconv.Atoi(os.Getenv("RT_EXP"))
+    if e != nil {
+        return nil, errs.ServerError("Error convertint RT_EXP")
+    }
+    
+    rtExpAt := time.Now().UTC().Add(time.Duration(rtExp) * time.Minute)
+
 	err = s.sessionRepo.NewSessionWithRemoving(domain.Session{
 		UserId:       user.Id,
 		RefreshToken: rT,
 		Ip:           r.Ip,
-		ExpiresAt:    time.Now().UTC().Add(24 * time.Hour),
+		ExpiresAt:    rtExpAt,
 	})
 	if err != nil {
 		return nil, err
@@ -40,10 +49,10 @@ func (s service) Login(r dto.UserRequest) (*dto.UserResponse, *errs.Error) {
 	userResponse := &dto.UserResponse{
 		Id:           user.Id,
 		Username:     user.Username,
-		Password:     user.Password,
 		Role:         user.Role,
 		AccessToken:  aT,
 		RefreshToken: rT,
+        RefreshExpires: rtExpAt,
 	}
 
 	return userResponse, nil

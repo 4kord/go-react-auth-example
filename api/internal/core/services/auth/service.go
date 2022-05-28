@@ -10,6 +10,7 @@ import (
 type Service interface {
 	Login(dto.UserRequest) (*dto.UserResponse, *errs.Error)
 	Register(dto.UserRequest) *errs.Error
+    Refresh(dto.SessionRequest) (*dto.UserResponse, *errs.Error)
 }
 
 type service struct {

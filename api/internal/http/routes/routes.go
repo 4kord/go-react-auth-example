@@ -15,7 +15,7 @@ import (
 )
 
 func Setup(app *fiber.App, db *sql.DB) *fiber.App {
-	userController := controllers.UserController{
+	authController := controllers.AuthController{
 		Service: authservice.New(users.New(db), sessions.New(db)),
 	}
 
@@ -28,8 +28,9 @@ func Setup(app *fiber.App, db *sql.DB) *fiber.App {
 		Role: "admin",
 	}))
 
-	app.Post("/api/auth/login", userController.Login)
-	app.Post("/api/auth/register", userController.Register)
+	app.Post("/api/auth/login", authController.Login)
+	app.Post("/api/auth/register", authController.Register)
+	app.Post("/api/auth/refresh", authController.Refresh)
 
 	app.Post("/api/user/test", func(c *fiber.Ctx) error {
 		return c.SendString("test protected page")

@@ -10,3 +10,15 @@ type Session struct {
     ExpiresAt time.Time
     CreatedAt time.Time
 }
+
+func (s *Session) Validate(ip string) bool {
+    if time.Now().UTC().After(s.ExpiresAt) {
+        return false
+    }
+
+    if s.Ip != ip {
+        return false
+    }
+
+    return true
+}

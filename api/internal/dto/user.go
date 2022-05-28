@@ -2,6 +2,7 @@ package dto
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/4kord/go-react-auth/internal/errs"
 )
@@ -9,19 +10,19 @@ import (
 type UserRequest struct {
     Username string `json:"username"`
     Password string `json:"password"`
-    Ip string
+    Ip string `json:"-"`
 }
 
 type UserResponse struct {
     Id int `json:"id"`
     Username string `json:"username"`
-    Password string `json:"password"`
     Role string `json:"role"`
     AccessToken string `json:"accessToken"`
-    RefreshToken string `json:"refreshToken"`
+    RefreshToken string `json:"-"`
+    RefreshExpires time.Time `json:"-"`
 }
 
-func (r UserRequest) Validate() *errs.Error {
+func (r *UserRequest) Validate() *errs.Error {
     if r.Username == "" || r.Password == "" {
         return &errs.Error{
             Code:    http.StatusUnprocessableEntity,

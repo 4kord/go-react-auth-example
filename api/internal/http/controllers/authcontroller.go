@@ -5,26 +5,23 @@ import (
 
 	"github.com/4kord/go-react-auth/internal/core/services/auth"
 	"github.com/4kord/go-react-auth/internal/dto"
-	"github.com/4kord/go-react-auth/internal/logger"
 	"github.com/gofiber/fiber/v2"
 )
 
-type UserController struct {
+type AuthController struct {
 	Service auth.Service
 }
 
-func (ctrl UserController) Register(c *fiber.Ctx) error {
+func (ctrl AuthController) Register(c *fiber.Ctx) error {
 	var request dto.UserRequest
 
 	err := c.BodyParser(&request)
 	if err != nil {
-		logger.ErrorLog.Println(err.Error())
 		return fiber.NewError(http.StatusBadRequest, err.Error())
 	}
 
 	e := ctrl.Service.Register(request)
 	if e != nil {
-		logger.ErrorLog.Println(e.Message)
 		return fiber.NewError(e.Code, e.Message)
 	}
 
@@ -34,12 +31,11 @@ func (ctrl UserController) Register(c *fiber.Ctx) error {
 	})
 }
 
-func (ctrl UserController) Login(c *fiber.Ctx) error {
+func (ctrl AuthController) Login(c *fiber.Ctx) error {
 	var request dto.UserRequest
 
 	err := c.BodyParser(&request)
 	if err != nil {
-		logger.ErrorLog.Println(err.Error())
 		return fiber.NewError(http.StatusBadRequest, err.Error())
 	}
 
@@ -47,10 +43,37 @@ func (ctrl UserController) Login(c *fiber.Ctx) error {
 
 	response, e := ctrl.Service.Login(request)
 	if e != nil {
-		logger.ErrorLog.Println(e.Message)
 		return fiber.NewError(e.Code, e.Message)
 	}
 
+    c.Cookie(&fiber.Cookie{
+        Name: "session",
+        Value: response.RefreshToken,
+        Expires: response.RefreshExpires,
+        HTTPOnly: true,
+    })
+
 	c.Status(http.StatusOK)
 	return c.JSON(response)
+}
+
+func (ctrl AuthController) Refresh(c *fiber.Ctx) error {
+    request := dto.SessionRequest{
+        RefreshToken: c.Cookies("session"),
+        Ip: c.IP(),
+    }
+
+    response, err := ctrl.Service.Refresh(request)
+    if err != nil {
+        return fiber.NewError(err.Code, err.Message)
+    }
+
+    c.Cookie(&fiber.Cookie{
+        Name: "session",
+        Value: response.RefreshToken,
+        Expires: response.RefreshExpires,
+        HTTPOnly: true,
+    })
+
+    return c.JSON(response)
 }
