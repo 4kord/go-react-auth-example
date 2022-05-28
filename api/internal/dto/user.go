@@ -9,6 +9,7 @@ import (
 type UserRequest struct {
     Username string `json:"username"`
     Password string `json:"password"`
+    Ip string
 }
 
 type UserResponse struct {
@@ -17,6 +18,7 @@ type UserResponse struct {
     Password string `json:"password"`
     Role string `json:"role"`
     AccessToken string `json:"accessToken"`
+    RefreshToken string `json:"refreshToken"`
 }
 
 func (r UserRequest) Validate() *errs.Error {

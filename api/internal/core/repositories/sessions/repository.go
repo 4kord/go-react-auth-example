@@ -1,4 +1,4 @@
-package users
+package sessions
 
 import (
 	"database/sql"
@@ -8,9 +8,8 @@ import (
 )
 
 type Repository interface {
-    GetUser(int) (*domain.User, *errs.Error)
-    Authenticate(string, string) (*domain.User, *errs.Error)
-    NewUser(domain.User) *errs.Error
+	// GetSession(string) (*domain.Session, *errs.Error)
+	NewSessionWithRemoving(domain.Session) *errs.Error
 }
 
 type repository struct {
