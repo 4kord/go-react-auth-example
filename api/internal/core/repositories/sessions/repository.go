@@ -10,6 +10,7 @@ import (
 type Repository interface {
 	GetSession(string) (*domain.Session, *errs.Error)
 	NewSessionWithRemoving(domain.Session) *errs.Error
+    DeleteSession(int) *errs.Error
 }
 
 type repository struct {

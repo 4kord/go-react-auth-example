@@ -11,5 +11,10 @@ func (r *SessionRequest) Validate() *errs.Error {
     if r.RefreshToken == "" {
         return errs.UnAuthorizedError("No refresh token provided")
     }
+
+    if r.Ip == "" {
+        return errs.UnAuthorizedError("No ip prodvided")
+    }
+
     return nil
 }

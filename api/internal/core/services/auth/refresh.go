@@ -22,8 +22,22 @@ func (s service) Refresh(r dto.SessionRequest) (*dto.UserResponse, *errs.Error) 
         return nil, err
     }
 
-    if valide := session.Validate(r.Ip); !valide {
+    if valide := session.ValidateExpiry(); !valide {
+        err = s.sessionRepo.DeleteSession(session.Id)
+        if err != nil {
+            return nil, err
+        }
+
         return nil, errs.UnAuthorizedError("Session has expired")
+    }
+    
+    if valid := session.ValidateIp(r.Ip); !valid  {
+        err = s.sessionRepo.DeleteSession(session.Id)
+        if err != nil {
+            return nil, err
+        }
+
+        return nil, errs.UnAuthorizedError("Ip conflict")
     }
 
     user, err := s.repo.GetUser(session.UserId)

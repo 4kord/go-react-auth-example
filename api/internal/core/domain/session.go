@@ -11,14 +11,11 @@ type Session struct {
     CreatedAt time.Time
 }
 
-func (s *Session) Validate(ip string) bool {
-    if time.Now().UTC().After(s.ExpiresAt) {
-        return false
-    }
-
-    if s.Ip != ip {
-        return false
-    }
-
-    return true
+func (s *Session) ValidateExpiry() bool {
+    return !time.Now().UTC().After(s.ExpiresAt)
 }
+
+func (s *Session) ValidateIp(requestIp string) bool {
+    return s.Ip == requestIp
+
+} 
