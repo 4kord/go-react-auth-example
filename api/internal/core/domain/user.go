@@ -15,7 +15,6 @@ type User struct {
 	Username string
 	Password string
 	Role     string
-	jwt.StandardClaims
 }
 
 func (d *User) GenerateToken() (string, *errs.Error) {
@@ -29,8 +28,6 @@ func (d *User) GenerateToken() (string, *errs.Error) {
 		Subject:   strconv.Itoa(d.Id),
 		ExpiresAt: time.Now().Add(time.Minute * time.Duration(atExp)).Unix(),
 	}
-
-	d.StandardClaims = claims
 
 	aT := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 

@@ -16,7 +16,7 @@ func New(config Config) fiber.Handler {
         }
 
         authHeaderSlice := strings.Split(authHeader, " ")
-        if len(authHeaderSlice) != 2 || authHeaderSlice[0] != "Bareer" {
+        if len(authHeaderSlice) != 2 || authHeaderSlice[0] != "Bearer" {
             return fiber.NewError(http.StatusUnauthorized, "Authorization header is in incorrect format")
         }
 

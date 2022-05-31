@@ -4,7 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/4kord/go-react-auth/internal/core/repositories/sessions"
-    "github.com/4kord/go-react-auth/internal/core/repositories/users"
+	"github.com/4kord/go-react-auth/internal/core/repositories/users"
 	authservice "github.com/4kord/go-react-auth/internal/core/services/auth"
 	"github.com/4kord/go-react-auth/internal/http/controllers"
 	"github.com/4kord/go-react-auth/internal/http/middlewares/auth"
@@ -21,19 +21,24 @@ func Setup(app *fiber.App, db *sql.DB) *fiber.App {
 
 	app.Use(recover.New())
 	app.Use(logger.New())
-	app.Use(cors.New())
+	app.Use(cors.New(cors.Config{
+		AllowCredentials: true,
+	}))
 
-	app.Use("/api/user", auth.New(auth.Config{
+	app.Use("/api/admin", auth.New(auth.Config{
 		Repo: users.New(db),
 		Role: "admin",
 	}))
 
 	app.Post("/api/auth/login", authController.Login)
 	app.Post("/api/auth/register", authController.Register)
-	app.Post("/api/auth/refresh", authController.Refresh)
+	app.Post("/api/auth/logout", authController.Logout)
+	app.Get("/api/auth/refresh", authController.Refresh)
 
-	app.Post("/api/user/test", func(c *fiber.Ctx) error {
-		return c.SendString("test protected page")
+	app.Get("/api/admin/test", func(c *fiber.Ctx) error {
+		return c.JSON(fiber.Map{
+			"message": "SUPER SECRET ADMIN INFO",
+		})
 	})
 
 	return app

@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App';
+import { AuthProvider } from './auth/AuthContext';
 
 const darkTheme = createTheme({
     palette: {
@@ -13,13 +14,13 @@ const darkTheme = createTheme({
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <React.StrictMode>
-        <BrowserRouter>
-            <ThemeProvider theme={darkTheme}>
+    <BrowserRouter>
+        <ThemeProvider theme={darkTheme}>
+            <AuthProvider>
                 <Routes>
                     <Route path="/*" element={<App />} />
                 </Routes>
-            </ThemeProvider>
-        </BrowserRouter>
-    </React.StrictMode>
+            </AuthProvider>
+        </ThemeProvider>
+    </BrowserRouter>
 );
