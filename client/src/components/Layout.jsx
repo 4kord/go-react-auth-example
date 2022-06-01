@@ -6,8 +6,10 @@ export const Layout = () => {
     return (
         <>
             <CssBaseline />
-            <Navbar />
+            {/* <Navbar /> */}
             <Outlet />
         </>
     );
 }
+
+// Request is sent twice because Navbar is enabled
