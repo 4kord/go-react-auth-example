@@ -11,7 +11,7 @@ type Service interface {
 	Login(dto.UserRequest) (*dto.UserResponse, *errs.Error)
 	Register(dto.UserRequest) *errs.Error
 	Logout(dto.SessionRequest) *errs.Error
-	Refresh(dto.SessionRequest) (*dto.UserResponse, *errs.Error)
+	Refresh(dto.SessionRequest) (*dto.SessionResponse, *errs.Error)
 }
 
 type service struct {

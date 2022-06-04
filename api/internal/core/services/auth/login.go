@@ -29,12 +29,12 @@ func (s service) Login(r dto.UserRequest) (*dto.UserResponse, *errs.Error) {
 
 	rT := uuid.New().String()
 
-    rtExp, e := strconv.Atoi(os.Getenv("RT_EXP"))
-    if e != nil {
-        return nil, errs.ServerError("Error convertint RT_EXP")
-    }
-    
-    rtExpAt := time.Now().UTC().Add(time.Duration(rtExp) * time.Minute)
+	rtExp, e := strconv.Atoi(os.Getenv("RT_EXP"))
+	if e != nil {
+		return nil, errs.ServerError("Error convertint RT_EXP")
+	}
+
+	rtExpAt := time.Now().UTC().Add(time.Duration(rtExp) * time.Minute)
 
 	err = s.sessionRepo.NewSessionWithRemoving(domain.Session{
 		UserId:       user.Id,
@@ -47,12 +47,12 @@ func (s service) Login(r dto.UserRequest) (*dto.UserResponse, *errs.Error) {
 	}
 
 	userResponse := &dto.UserResponse{
-		Id:           user.Id,
-		Username:     user.Username,
-		Role:         user.Role,
-		AccessToken:  aT,
-		RefreshToken: rT,
-        RefreshExpires: rtExpAt,
+		Id:             user.Id,
+		Username:       user.Username,
+		Role:           user.Role,
+		AccessToken:    aT,
+		RefreshToken:   rT,
+		RefreshExpires: rtExpAt,
 	}
 
 	return userResponse, nil

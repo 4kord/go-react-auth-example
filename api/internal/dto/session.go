@@ -1,10 +1,20 @@
 package dto
 
-import "github.com/4kord/go-react-auth/internal/errs"
+import (
+	"time"
+
+	"github.com/4kord/go-react-auth/internal/errs"
+)
 
 type SessionRequest struct {
 	RefreshToken string
 	Ip           string
+}
+
+type SessionResponse struct {
+	AccessToken    string    `json:"accessToken"`
+	RefreshToken   string    `json:"-"`
+	RefreshExpires time.Time `json:"-"`
 }
 
 func (r *SessionRequest) Validate() *errs.Error {

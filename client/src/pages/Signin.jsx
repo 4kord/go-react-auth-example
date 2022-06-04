@@ -4,7 +4,7 @@ import { Box, Container } from "@mui/system";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Link as RouterLink } from "react-router-dom";
 import Link from '@mui/material/Link';
-import axios from "../api/axios";
+import { axiosPublic } from "../api/axios";
 import { useAuth } from "../auth/useAuth";
 import { useAxiosFunction } from "../auth/useAxiosFunction";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -26,7 +26,7 @@ export const Signin = () => {
         e.preventDefault();
 
         await axiosFetch({
-            axiosInstance: axios,
+            axiosInstance: axiosPublic,
             method: "POST",
             url: "/auth/login",
             requestConfig: {
@@ -43,6 +43,7 @@ export const Signin = () => {
  
     React.useEffect(() => {
         if (response && !error && !loading) {
+            window.accessToken = response.accessToken;
             setAuth(response);
             navigate(from, { replace: true });
         }

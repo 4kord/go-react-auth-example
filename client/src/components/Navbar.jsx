@@ -11,27 +11,27 @@ import { Link } from "react-router-dom";
 import { useWidth } from '../hooks/useWidth';
 import { useAuth } from '../auth/useAuth';
 import { useAxiosFunction } from '../auth/useAxiosFunction';
-import { useAxiosPrivate } from '../auth/useAxiosPrivate';
 import { Loading } from './Loading';
 import { ErrorAlert } from './ErrorAlert';
 import { InfoAlert } from './InfoAlert';
+import { axiosPublic } from '../api/axios';
 
 export function Navbar() {
     const { auth, setAuth } = useAuth();
     const [menu1AnchorEl, setMenu1AnchorEl] = React.useState(null);
     const [menu2AnchorEl, setMenu2AnchorEl] = React.useState(null);
+    const [response, error, loading, axiosFetch] = useAxiosFunction();
 
     const width = useWidth()
 
-    const axiosPrivate = useAxiosPrivate();
-    const [response, error, loading, axiosFetch] = useAxiosFunction()
-
     const handleMenu1 = (event) => {
         setMenu1AnchorEl(event.currentTarget);
+        console.log("fdsfs")
     };
 
     const handleMenu2 = (event) => {
         setMenu2AnchorEl(event.currentTarget);
+        console.log("fdsfs")
     };
     
     const handleClose = () => {
@@ -39,15 +39,14 @@ export function Navbar() {
         setMenu2AnchorEl(null);
     };
 
-    const logout = () => {
-        setAuth({});
-        axiosFetch({
-            axiosInstance: axiosPrivate,
+    const handleLogout = async () => {
+        await axiosFetch({
+            axiosInstance: axiosPublic,
             method: "POST",
             url: "/auth/logout"
-        })
-        handleClose();
-    };
+        });
+        setAuth({});
+    }
 
     return (
         <>
@@ -124,8 +123,8 @@ export function Navbar() {
                                 >
                                     <MenuItem onClick={handleClose}>Profile</MenuItem>
                                     <MenuItem onClick={handleClose}>My account</MenuItem>
-                                    {auth?.role === "admin" && <MenuItem component={Link} to="/admin" onClick={handleClose}>Admin</MenuItem>}
-                                    {auth?.username && <MenuItem onClick={logout}>Logout</MenuItem>}
+                                    {auth?.role === "user" && <MenuItem component={Link} to="/user" onClick={handleClose}>User</MenuItem>}
+                                    {auth?.username && <MenuItem onClick={handleLogout}>Logout</MenuItem>}
                                 </Menu>
                             </Box>
                         </>

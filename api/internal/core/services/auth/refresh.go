@@ -11,7 +11,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func (s service) Refresh(r dto.SessionRequest) (*dto.UserResponse, *errs.Error) {
+func (s service) Refresh(r dto.SessionRequest) (*dto.SessionResponse, *errs.Error) {
 	err := r.Validate()
 	if err != nil {
 		return nil, err
@@ -40,12 +40,7 @@ func (s service) Refresh(r dto.SessionRequest) (*dto.UserResponse, *errs.Error) 
 		return nil, errs.UnAuthorizedError("Ip conflict")
 	}
 
-	user, err := s.repo.GetUser(session.UserId)
-	if err != nil {
-		return nil, err
-	}
-
-	aT, err := user.GenerateToken()
+	aT, err := session.GenerateToken()
 	if err != nil {
 		return nil, err
 	}
@@ -70,14 +65,11 @@ func (s service) Refresh(r dto.SessionRequest) (*dto.UserResponse, *errs.Error) 
 		return nil, err
 	}
 
-	userResponse := &dto.UserResponse{
-		Id:             user.Id,
-		Username:       user.Username,
-		Role:           user.Role,
+	sessionResponse := &dto.SessionResponse{
 		AccessToken:    aT,
 		RefreshToken:   rT,
 		RefreshExpires: rtExpAt,
 	}
 
-	return userResponse, nil
+	return sessionResponse, nil
 }

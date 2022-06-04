@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
 export const useAxiosFunction = () => {
     const [response, setResponse] = useState(null);
     const [error, setError] = useState("");

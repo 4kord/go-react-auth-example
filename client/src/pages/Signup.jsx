@@ -5,7 +5,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Link from '@mui/material/Link';
 import { useAxiosFunction } from "../auth/useAxiosFunction";
-import axios from "../api/axios";
+import { axiosPublic } from "../api/axios";
 import { Loading } from "../components/Loading";
 import { ErrorAlert } from "../components/ErrorAlert";
 
@@ -21,7 +21,7 @@ export const Signup = () => {
         e.preventDefault();
 
         await axiosFetch ({
-            axiosInstance: axios,
+            axiosInstance: axiosPublic,
             method: "POST",
             url: "auth/register",
             requestConfig: {
